@@ -12,6 +12,7 @@
   boost,
   libxml2,
   zlib,
+  llvmStatic ? true,
 }:
 
 let
@@ -33,7 +34,11 @@ stdenv.mkDerivation {
   # Link only LLVM's "support" component statically instead of the
   # monolithic libLLVM dylib; this keeps ~550 MiB of LLVM out of the
   # runtime closure. Static LLVMSupport needs zlib/libxml2 at link time.
-  mesonFlags = [ (lib.mesonBool "llvm_static" true) ];
+  mesonFlags = [ (lib.mesonBool "llvm_static" llvmStatic) ];
+
+  # Fail the build if the libLLVM dylib ever sneaks back into the closure,
+  # e.g. because the static link above silently fell back to dynamic.
+  disallowedRequisites = lib.optionals llvmStatic [ (lib.getLib llvmPackages.llvm) ];
 
   preConfigure = ''
     cd ${pname}
