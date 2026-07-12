@@ -11,9 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        # "nixd" links LLVMSupport statically (llvm_static=true, the default);
-        # "nixd-llvm-dynamic" links against the libLLVM dylib (llvm_static=false).
-        package: [ nixd, nixd-llvm-dynamic ]
+        package: [ nixd, nixd-llvm-static ]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: cachix/install-nix-action@v31

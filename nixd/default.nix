@@ -12,7 +12,7 @@
   boost,
   libxml2,
   zlib,
-  llvmStatic ? true,
+  llvmStatic ? false,
 }:
 
 let

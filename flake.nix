@@ -43,9 +43,7 @@
             inherit nixComponents nixf nixt;
             inherit llvmPackages;
           };
-          # Same package linked against the libLLVM dylib instead; built in CI
-          # so the llvm_static=false configuration doesn't bitrot.
-          nixd-llvm-dynamic = nixd.override { llvmStatic = false; };
+          nixd-llvm-static = nixd.override { llvmStatic = true; };
           nixdMono = callPackage ./. { inherit nixComponents llvmPackages; };
           nixdLLVM = nixdMono.override { stdenv = if stdenv.isDarwin then stdenv else llvmPackages.stdenv; };
           regressionDeps = with pkgs; [
@@ -74,7 +72,7 @@
           packages = {
             inherit
               nixd
-              nixd-llvm-dynamic
+              nixd-llvm-static
               nixf
               nixt
               ;
